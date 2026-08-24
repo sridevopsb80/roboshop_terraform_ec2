@@ -59,17 +59,18 @@ resource "aws_lb_listener" "public-http" {
   }
 }
 
-#creating aws lb listener
-#values for port, protocol and ssl_policy are defined in main.tfvars for dev or prod
-#by default, a fixed response of 500 will be returned.
+# creating aws lb listener
+# values for port, protocol and ssl_policy are defined in main.tfvars for dev or prod
+# by default, a fixed response of 500 will be returned.
 resource "aws_lb_listener" "main" {
   load_balancer_arn = aws_lb.main.arn
   port              = var.listener_port
   protocol          = var.listener_protocol
   ssl_policy        = var.ssl_policy
   certificate_arn   = var.acm_https_arn
-  #https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener#fixed-response-action
-  #unless we receive a host header, traffic to be sent to appropriate target group. if not, fixed response is 500
+  # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener#fixed-response-action
+  # unless we receive a host header, traffic to be sent to appropriate target group. 
+  # if not, fixed response is 500
   default_action {
     type = "fixed-response"
     fixed_response {
