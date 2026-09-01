@@ -18,7 +18,7 @@ resource "aws_security_group" "main" {
     from_port   = 22
     to_port     = 22
     protocol    = "TCP"
-    cidr_blocks = var.bastion_nodes
+    cidr_blocks = var.build_server
   }
   #allow inbound TCP traffic on 80 or 8080 port based on ec2 profile - apps or db
   ingress {

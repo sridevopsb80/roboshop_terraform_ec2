@@ -2,8 +2,8 @@
 #github workflow is getting values for the pipeline to run from this file
 
 env           = "dev"
-bastion_nodes = ["172.31.44.168/32"] #IP of the terraform Ec2 machine
-zone_id       = "Z02073473N3J0S3WVZG5G"
+build_server = ["172.31.44.168/32"] #IP of the terraform Ec2 machine
+zone_id       = "Z09235141SU2IO4ICUFVB"
 
 #defining values for the vpc for dev env. Refer terraform documentation in the readme file.
 

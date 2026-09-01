@@ -39,7 +39,7 @@ module "db" {
   subnet_ids    = module.vpc.subnets[each.value.subnet_ref]
   vpc_id        = module.vpc.vpc_id
   env           = var.env
-  bastion_nodes = var.bastion_nodes
+  build_server = var.build_server
   vault_token   = var.vault_token
   zone_id       = var.zone_id
 }
@@ -56,7 +56,7 @@ module "apps" {
   capacity         = each.value.capacity
   vpc_id           = module.vpc.vpc_id
   env              = var.env
-  bastion_nodes    = var.bastion_nodes
+  build_server    = var.build_server
   asg              = true
   vault_token      = var.vault_token
   zone_id          = var.zone_id
@@ -92,7 +92,7 @@ module "apps" {
 #   capacity         = each.value["capacity"]
 #   vpc_id           = module.vpc.vpc_id
 #   env              = var.env
-#   bastion_nodes    = var.bastion_nodes
+#   build_server    = var.build_server
 #   asg              = true
 #   vault_token      = var.vault_token
 #   zone_id          = var.zone_id
@@ -112,7 +112,7 @@ module "apps" {
 #   subnet_ids    = module.vpc.subnets[each.value["subnet_ref"]]
 #   vpc_id        = module.vpc.vpc_id
 #   env           = var.env
-#   bastion_nodes = var.bastion_nodes
+#   build_server = var.build_server
 #   vault_token   = var.vault_token
 #   zone_id       = var.zone_id
 # }

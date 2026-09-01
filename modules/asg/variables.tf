@@ -5,7 +5,7 @@ variable "allow_sg_cidr" {}
 variable "subnet_ids" {}
 variable "vpc_id" {}
 variable "env" {}
-variable "bastion_nodes" {}
+variable "build_server" {}
 variable "capacity" {
   default = {}
 }
