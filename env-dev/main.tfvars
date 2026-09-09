@@ -156,7 +156,8 @@ load_balancers = {
      allow_lb_sg_cidr   = ["0.0.0.0/0"] #internet traffic being allowed
      subnet_ref         = "public"
      acm_https_arn = "arn:aws:acm:us-east-1:730335603480:certificate/acabf6ec-3c9e-4949-a9ec-73c29792d1b1" 
-     # ACM -> Certificate -> ARN value. value is being provided since lb is internet facing and should use https
+     # ACM -> Certificate -> ARN value. 
+     # value is being provided since lb is internet facing and should use https
     listener_port      = "443"
     listener_protocol  = "HTTPS"
     ssl_policy         = "ELBSecurityPolicy-2016-08"

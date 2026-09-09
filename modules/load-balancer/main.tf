@@ -1,5 +1,5 @@
 
-#security group to allow app related ports
+# security group to allow app related ports
 resource "aws_security_group" "load-balancer" {
   name        = "${var.name}-${var.env}-alb-sg"
   description = "${var.name}-${var.env}-alb-sg"
@@ -12,14 +12,14 @@ resource "aws_security_group" "load-balancer" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-  #allow TCP traffic on 80 port
+  # allow TCP traffic on 80 port
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "TCP"
     cidr_blocks = var.allow_lb_sg_cidr
   }
-  #allow TCP traffic on 443 port
+  # allow TCP traffic on 443 port
   ingress {
     from_port   = 443
     to_port     = 443
@@ -31,7 +31,7 @@ resource "aws_security_group" "load-balancer" {
   }
 }
 
-#define lb
+# define lb
 resource "aws_lb" "main" {
   name               = "${var.name}-${var.env}"
   internal           = var.internal #public or internal
@@ -45,7 +45,7 @@ resource "aws_lb" "main" {
 
 #creating aws lb listener to redirect http traffic to https
 resource "aws_lb_listener" "public-http" {
-  count             = var.internal ? 0 : 1 #if var.internal is false, run this
+  count             = var.internal ? 0 : 1 #if var.internal is false, run this. value false for frontend
   load_balancer_arn = aws_lb.main.arn
   port              = "80"
   protocol          = "HTTP"

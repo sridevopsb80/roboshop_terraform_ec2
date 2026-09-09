@@ -1,11 +1,11 @@
-#module used to provision asg with ec2s
+# module used to provision asg with ec2s
 
-#security group to allow app related ports
+# security group to allow app related ports
 resource "aws_security_group" "main" {
   name        = "${var.name}-${var.env}-sg"
   description = "${var.name}-${var.env}-sg"
   vpc_id      = var.vpc_id
-  #allowing all outbound traffic
+  # allow all outbound traffic
   egress {
     from_port = 0
     to_port   = 0
@@ -13,7 +13,7 @@ resource "aws_security_group" "main" {
     cidr_blocks = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-  #allowing inbound TCP traffic from bastion nodes
+  # allow inbound TCP traffic from bastion nodes
   ingress {
     from_port   = 22
     to_port     = 22
@@ -32,17 +32,18 @@ resource "aws_security_group" "main" {
   }
 }
 
-#creating launch template for ec2 auto-scaling group
-#user data is used to run a script while launching an instance. input is base64 encoded
-#user data input is being obtained from userdata.sh
-#copying the userdata info from ec2 resource to launch_template. this is to make sure ec2 in auto scaling groups also run similar to ec2 instances spun separately
+# create launch template for ec2 auto-scaling group
+# user data is used to run a script while launching an instance. input is base64 encoded
+# user data input is being obtained from userdata.sh
+# copying the userdata info from ec2 resource to launch_template. 
+# this is to make sure ec2 in auto scaling groups also run similar to ec2 instances spun separately
 resource "aws_launch_template" "main" {
   name                   = "${var.name}-${var.env}-lt"
   image_id               = data.aws_ami.rhel9.image_id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.main.id]
 
-  #choosing spot instances to reduce cost
+  # choosing spot instances to reduce cost
   instance_market_options {
     market_type = "spot"
   }
@@ -58,7 +59,7 @@ resource "aws_launch_template" "main" {
   }
 }
 
-#creating ec2 auto-scaling group
+# create ec2 auto-scaling group
 resource "aws_autoscaling_group" "main" {
   name                = "${var.name}-${var.env}-asg"
   desired_capacity    = var.capacity["desired"]
@@ -77,7 +78,7 @@ resource "aws_autoscaling_group" "main" {
   }
 }
 
-#creating target group
+# creating target group
 resource "aws_lb_target_group" "main" {
   name     = "${var.name}-${var.env}"
   port     = var.allow_port #need to open same ports that are to be opened in the ec2 instances
@@ -95,7 +96,8 @@ resource "aws_lb_target_group" "main" {
   }
 }
 
-#creating dns records for apps instances which will be routed via lb. catalogue.dev.sridevopsb80.site will have a cname pointing to the load balancer public.dev-...
+# create dns records for apps instances which will be routed via lb. 
+# catalogue.dev.sridevopsb80.site will have a cname pointing to the load balancer public.dev-...
 resource "aws_route53_record" "lb" {
   zone_id = var.zone_id
   name    = "${var.name}.${var.env}"
@@ -104,7 +106,7 @@ resource "aws_route53_record" "lb" {
   records = [var.dns_name] #aws_lb.main.dns_name value
 }
 
-#create a listener rule to forward traffic to target group, provided the host header condition is satisfied
+# create a listener rule to forward traffic to target group, provided the host header condition is satisfied
 resource "aws_lb_listener_rule" "listener-rule" {
   listener_arn = var.listener_arn
   priority     = var.lb_rule_priority
